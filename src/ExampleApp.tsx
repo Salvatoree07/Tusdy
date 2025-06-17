@@ -17,8 +17,6 @@ import type {
   BinaryFileData,
   ExcalidrawImperativeAPI,
   ExcalidrawInitialDataState,
-  Gesture,
-  PointerDownState as ExcalidrawPointerDownState,
 } from "@excalidraw/excalidraw/types";
 
 import initialData from "./initialData";
@@ -26,19 +24,20 @@ import {
   resolvablePromise,
 } from "../utils";
 
-import MobileFooter from "./MobileFooter";
 
 import "./ExampleApp.scss";
 import type { ResolvablePromise } from "../utils";
 import { buildConceptMap } from "./ConceptLayout";
 import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 import { buildComponents } from "./initialData";
-export var datiLin = "La bomba atomica: nascita, impatto e conseguenze; Hiroshima e Nagasaki, Giappone; 6 e 9 agosto 1945; La bomba atomica, sviluppata durante la Seconda Guerra Mondiale nel contesto del Progetto Manhattan, fu utilizzata dagli Stati Uniti contro le città giapponesi di Hiroshima e Nagasaki, causando centinaia di migliaia di morti e segnando l'inizio dell'era nucleare; La bomba atomica fu il risultato di una corsa scientifica e militare senza precedenti. Il Progetto Manhattan, avviato nel 1939 e guidato da scienziati come Oppenheimer e Fermi, portò alla creazione di un’arma nucleare capace di sprigionare un’energia distruttiva mai vista. Il 6 agosto 1945, la bomba “Little Boy” fu sganciata su Hiroshima, seguita tre giorni dopo da “Fat Man” su Nagasaki. Gli effetti furono devastanti: decine di migliaia di persone morirono all’istante, e molte altre perirono nei mesi successivi a causa delle radiazioni; L’uso delle bombe atomiche ebbe conseguenze politiche, morali e scientifiche profonde. Se da un lato accelerò la resa del Giappone e la fine del conflitto, dall’altro sollevò dibattiti etici sull’uso di armi di distruzione di massa. Inoltre, aprì la strada alla Guerra Fredda e alla proliferazione nucleare. Il mondo entrò in una nuova fase geopolitica dominata dall’equilibrio del terrore tra le potenze atomiche, che ancora oggi influenza la politica internazionale.";
+//export var datiLin = "La bomba atomica: nascita, impatto e conseguenze; Hiroshima e Nagasaki, Giappone; 6 e 9 agosto 1945; La bomba atomica, sviluppata durante la Seconda Guerra Mondiale nel contesto del Progetto Manhattan, fu utilizzata dagli Stati Uniti contro le città giapponesi di Hiroshima e Nagasaki, causando centinaia di migliaia di morti e segnando l'inizio dell'era nucleare; La bomba atomica fu il risultato di una corsa scientifica e militare senza precedenti. Il Progetto Manhattan, avviato nel 1939 e guidato da scienziati come Oppenheimer e Fermi, portò alla creazione di un’arma nucleare capace di sprigionare un’energia distruttiva mai vista. Il 6 agosto 1945, la bomba “Little Boy” fu sganciata su Hiroshima, seguita tre giorni dopo da “Fat Man” su Nagasaki. Gli effetti furono devastanti: decine di migliaia di persone morirono all’istante, e molte altre perirono nei mesi successivi a causa delle radiazioni; L’uso delle bombe atomiche ebbe conseguenze politiche, morali e scientifiche profonde. Se da un lato accelerò la resa del Giappone e la fine del conflitto, dall’altro sollevò dibattiti etici sull’uso di armi di distruzione di massa. Inoltre, aprì la strada alla Guerra Fredda e alla proliferazione nucleare. Il mondo entrò in una nuova fase geopolitica dominata dall’equilibrio del terrore tra le potenze atomiche, che ancora oggi influenza la politica internazionale.";
+import type { Dato } from "./app/page";
+
 
 export interface AppProps {
   appTitle: string;
-  useCustom: any;
-  // useCustom: (api: ExcalidrawImperativeAPI | null, customArgs?: any[]) => void;
+  useCustom: Dato;
+  //useCustom: (api: ExcalidrawImperativeAPI | null, customArgs?: any[]) => void;
   customArgs?: any[];
   children: React.ReactNode;
   excalidrawLib: typeof TExcalidraw;
@@ -416,13 +415,6 @@ export default function ExampleApp({
         <MainMenu.DefaultItems.SaveAsImage />
         <MainMenu.DefaultItems.Export />
         <MainMenu.Separator />
-
-        {excalidrawAPI && (
-          <MobileFooter
-            excalidrawLib={excalidrawLib}
-            excalidrawAPI={excalidrawAPI}
-          />
-        )}
       </MainMenu>
     );
   };

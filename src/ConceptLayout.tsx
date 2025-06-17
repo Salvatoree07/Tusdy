@@ -4,6 +4,7 @@ type ConceptNode = {
   children?: ConceptNode[];
 };
 //modificare lo stile in base alle scelte dell'utente magari mettere un rtettangolo con un testo 
+import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 
 function createArrowBetween(
   from: { x: number; y: number; id: string },
@@ -14,7 +15,7 @@ function createArrowBetween(
   const deltaX = to.x - x - 10;
   const deltaY = to.y - y - 10;
   console.log("quasta e");
-  const arrow = {
+  const arrow: ExcalidrawElementSkeleton = {
     id: nanoid(),
     type: "arrow",
     x:x, // metà del box "da"
@@ -67,10 +68,10 @@ function buildExcalidrawElementsFromConcepts(
   spacingX = 300,
   spacingY = 150,
   parentId?: string,
-  elements: any[] = [],
-  connections: any[] = [],
+  elements: ExcalidrawElementSkeleton[] = [],
+  connections: ExcalidrawElementSkeleton[] = [],
   positions: Record<string, { x: number; y: number }>= {}
-): { elements: any[]; connections: any[] } {
+): { elements: ExcalidrawElementSkeleton[]; connections: ExcalidrawElementSkeleton[] } {
   const x = startX + depth * spacingX;
   const y = currentY.value;
   const nodeId = nanoid();
@@ -79,7 +80,7 @@ function buildExcalidrawElementsFromConcepts(
   positions[nodeId] = { x, y };
 
   // Nodo
-  const box = {
+  const box: ExcalidrawElementSkeleton = {
     id: nodeId,
     type: "text",
     x,
@@ -119,7 +120,7 @@ function buildExcalidrawElementsFromConcepts(
   // Freccia di connessione
   console.log(parentId);
   if (parentId) {
-    const arrow = createArrowBetween({x:positions[parentId].x, y: positions[parentId].y, id:parentId}, {x:x, y:y, id:nodeId});
+    const arrow: ExcalidrawElementSkeleton = createArrowBetween({x:positions[parentId].x, y: positions[parentId].y, id:parentId}, {x:x, y:y, id:nodeId});
     // const arrow = {
     //   id: nanoid(),
     //   type: "arrow",
