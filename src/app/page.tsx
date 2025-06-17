@@ -1,7 +1,6 @@
 'use client'
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { JSX } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,13 +11,13 @@ import "@excalidraw/excalidraw/index.css";
 import ExcalidrawClient from "@/components/ExcalidrawClient";
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
-type Dato = {
+export type Dato = {
   type: boolean;
   body: string;
 }
 
 
-var dati : Dato = {
+let dati : Dato = {
   type: false,
   body: "errore"
 };

@@ -97,7 +97,7 @@ type Dato = {
 }
 
 
-var dati : Dato = {
+let dati : Dato = {
   type: false,
   body: "errore"
 };

@@ -1,7 +1,6 @@
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 import type { FileId } from "@excalidraw/excalidraw/element/types";
 import type { FractionalIndex } from "@excalidraw/excalidraw/element/types";
-import { trasformaTesto, prendiTesto } from "./ExampleApp";
 
 const elements: ExcalidrawElementSkeleton[] = 
   [
@@ -190,7 +189,6 @@ const elements: ExcalidrawElementSkeleton[] =
       containerId: null,
       originalText: "placeholder",
       autoResize: false,
-      lineHeight: 1.15 as any,
     },
     {
       id: "zVrB5l1RBD64GEd-CnuNo",
@@ -735,8 +733,7 @@ export function buildComponents(content: any) : ExcalidrawElementSkeleton[]{
         verticalAlign: "top",
         containerId: null,
         originalText: content.paragrafo1,
-        autoResize: false,
-        lineHeight: 1.15 as any,
+        autoResize: false
       },
       {
         id: "zVrB5l1RBD64GEd-CnuNo",

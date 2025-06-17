@@ -38,25 +38,23 @@ export interface AppProps {
   appTitle: string;
   useCustom: Dato;
   //useCustom: (api: ExcalidrawImperativeAPI | null, customArgs?: any[]) => void;
-  customArgs?: any[];
   children: React.ReactNode;
   excalidrawLib: typeof TExcalidraw;
 }
 
 
 
-var blob: Blob;
+let blob: Blob;
 
-var testoLin: any;
 function wrapTextEveryNChars(text: string, maxLength: number): string {
   let result = "";
   let i = 0;
   try{
     while (i < text.length) {
     // Prendi un blocco di massimo maxLength caratteri
-    let chunk = text.slice(i, i + maxLength);
+    const chunk = text.slice(i, i + maxLength);
     // Cerca l'ultimo spazio nel blocco
-    let lastSpace = chunk.lastIndexOf(" ");
+    const lastSpace = chunk.lastIndexOf(" ");
     if (lastSpace === -1 || i + maxLength >= text.length) {
       // Nessuno spazio trovato, o fine testo -> aggiungi tutto il blocco
       result += chunk;
@@ -74,21 +72,21 @@ function wrapTextEveryNChars(text: string, maxLength: number): string {
 }
 
 export function prendiTesto() : string {
-  var testo: string = "";
+  let testo: string = "";
   return testo;
 }
 
 export function trasformaTesto(testo: string) {
   console.log('testofinale', testo);
-  let segmentazione: string[] = testo.split(";");
+  const segmentazione: string[] = testo.split(";");
   console.log("contenuto splittato", segmentazione);
   
   //inserimento di una variabile per ogni parametro
-  var para1 : string = wrapTextEveryNChars(segmentazione[4], 85);
-  var para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
-  var sum : string = wrapTextEveryNChars(segmentazione[3], 30);
+  let para1 : string = wrapTextEveryNChars(segmentazione[4], 85);
+  let para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
+  let sum : string = wrapTextEveryNChars(segmentazione[3], 30);
 
-  let content: {
+  const content: {
     titolo: string;
     luogo: string;
     data: string;
@@ -103,9 +101,7 @@ export function trasformaTesto(testo: string) {
 
 
 export default function ExampleApp({
-  appTitle,
   useCustom,
-  customArgs,
   children,
   excalidrawLib,
 }: AppProps) {
@@ -117,10 +113,10 @@ export default function ExampleApp({
     loadFromBlob,
   } = excalidrawLib;
   const appRef = useRef<any>(null);
-  const [viewModeEnabled, setViewModeEnabled] = useState(false);
-  const [zenModeEnabled, setZenModeEnabled] = useState(false);
-  const [gridModeEnabled, setGridModeEnabled] = useState(false);
-  const [renderScrollbars, setRenderScrollbars] = useState(false);
+  // const [viewModeEnabled, setViewModeEnabled] = useState(false);
+  // const [zenModeEnabled, setZenModeEnabled] = useState(false);
+  // const [gridModeEnabled, setGridModeEnabled] = useState(false);
+  // const [renderScrollbars, setRenderScrollbars] = useState(false);
   const [theme, setTheme] = useState<Theme>("light");
   const [disableImageTool, setDisableImageTool] = useState(false);
   
@@ -143,7 +139,6 @@ export default function ExampleApp({
     if (!excalidrawAPI) {
       return;
     }
-    testoLin = useCustom;
     const fetchData = async () => {
       const res = await fetch("/images/rocket.jpeg");
       const imageData = await res.blob();
@@ -208,7 +203,7 @@ export default function ExampleApp({
             const dati = trasformaTesto(useCustom.body);
             const scene = buildComponents(dati);
 
-            //@ts-ignore
+            //@ts-expect-error
             initialStatePromiseRef.current.promise.resolve({
               ...initialData,
               elements: convertToExcalidrawElements(scene),
@@ -231,7 +226,7 @@ export default function ExampleApp({
       (child) =>
         React.isValidElement(child) &&
         typeof child.type !== "string" &&
-        //@ts-ignore
+        //@ts-expect-error
         child.type.displayName === "Excalidraw",
     );
     if (!Excalidraw) {
@@ -243,15 +238,13 @@ export default function ExampleApp({
         excalidrawAPI: (api: ExcalidrawImperativeAPI) => setExcalidrawAPI(api),
         initialData: initialStatePromiseRef.current.promise,
         onChange: (
-          elements: NonDeletedExcalidrawElement[],
-          state: AppState,
         ) => {
           //console.info("Elements :", elements, "State : ", state);
         },
-        viewModeEnabled,
-        zenModeEnabled,
-        renderScrollbars,
-        gridModeEnabled,
+        // viewModeEnabled,
+        // zenModeEnabled,
+        // renderScrollbars,
+        // gridModeEnabled,
         theme,
         name: "Custom name of drawing",
         UIOptions: {
@@ -275,25 +268,25 @@ export default function ExampleApp({
   };
   
 
-  const loadSceneOrLibrary = async () => {
+  // const loadSceneOrLibrary = async () => {
 
-    //blob da inserire nei parametri
-    const data = await loadFromBlob(blob, null, null);
-    console.log("HEllo world");
-    console.log(data);
+  //   //blob da inserire nei parametri
+  //   const data = await loadFromBlob(blob, null, null);
+  //   console.log("HEllo world");
+  //   console.log(data);
 
-    excalidrawAPI?.updateScene(data as any);
-    // const file = await fileOpen({ description: "Excalidraw or library file" });
-    // const contents = await loadSceneOrLibraryFromBlob(file, null, null);
-    // if (contents.type === MIME_TYPES.excalidraw) {
-    //   excalidrawAPI?.updateScene(contents.data as any);
-    // } else if (contents.type === MIME_TYPES.excalidrawlib) {
-    //   excalidrawAPI?.updateLibrary({
-    //     libraryItems: (contents.data as ImportedLibraryData).libraryItems!,
-    //     openLibraryMenu: true,
-    //   });
-    // }
-  };
+  //   excalidrawAPI?.updateScene(data as any);
+  //   // const file = await fileOpen({ description: "Excalidraw or library file" });
+  //   // const contents = await loadSceneOrLibraryFromBlob(file, null, null);
+  //   // if (contents.type === MIME_TYPES.excalidraw) {
+  //   //   excalidrawAPI?.updateScene(contents.data as any);
+  //   // } else if (contents.type === MIME_TYPES.excalidrawlib) {
+  //   //   excalidrawAPI?.updateLibrary({
+  //   //     libraryItems: (contents.data as ImportedLibraryData).libraryItems!,
+  //   //     openLibraryMenu: true,
+  //   //   });
+  //   // }
+  // };
 
   type ConceptNode = {
     title: string;
@@ -316,19 +309,19 @@ export default function ExampleApp({
   };
 
 
-  const caricaMappa = () => {
-    const { elements, connections } = buildConceptMap(conceptTree);
-    const scene : ExcalidrawElementSkeleton[] = [...elements, ...connections];
-    //gesire update scene
+  // const caricaMappa = () => {
+  //   const { elements, connections } = buildConceptMap(conceptTree);
+  //   const scene : ExcalidrawElementSkeleton[] = [...elements, ...connections];
+  //   //gesire update scene
     
-    excalidrawAPI?.updateScene({
-        elements: convertToExcalidrawElements(scene),
-    });
+  //   excalidrawAPI?.updateScene({
+  //       elements: convertToExcalidrawElements(scene),
+  //   });
     
-      // appState: {
-      //   viewBackgroundColor: "#fffefc",
-      // }
-  };
+  //     // appState: {
+  //     //   viewBackgroundColor: "#fffefc",
+  //     // }
+  // };
 
   function parseJSONFromString(input: string): any | null {
     try {
@@ -346,19 +339,19 @@ export default function ExampleApp({
     }
   }
 
-  const ricaricaNuovo = () =>{
+  // const ricaricaNuovo = () =>{
     
-    const cleaned = parseJSONFromString(useCustom.body);
-    console.log(cleaned);
-    console.log(conceptTree);
-    const { elements, connections } = buildConceptMap(cleaned);
-    const scene : ExcalidrawElementSkeleton[] = [...elements, ...connections];
-    //gesire update scene
+  //   const cleaned = parseJSONFromString(useCustom.body);
+  //   console.log(cleaned);
+  //   console.log(conceptTree);
+  //   const { elements, connections } = buildConceptMap(cleaned);
+  //   const scene : ExcalidrawElementSkeleton[] = [...elements, ...connections];
+  //   //gesire update scene
     
-    excalidrawAPI?.updateScene({
-        elements: convertToExcalidrawElements(scene),
-    });
-  }
+  //   excalidrawAPI?.updateScene({
+  //       elements: convertToExcalidrawElements(scene),
+  //   });
+  // }
 
   const onLinkOpen = useCallback(
     (
@@ -383,29 +376,29 @@ export default function ExampleApp({
     [],
   );
 
-  const onSave = async () => {
-    if (!excalidrawAPI) {
-      return false;
-    }
+  // const onSave = async () => {
+  //   if (!excalidrawAPI) {
+  //     return false;
+  //   }
 
-    const jsonScene = {
-      type: "excalidraw",
-      version: 2,
-      source: "my-app", // puoi personalizzare questo campo
-      elements: excalidrawAPI.getSceneElements(),
-      appState: excalidrawAPI.getAppState(),
-      files: excalidrawAPI.getFiles(),
-    };
+  //   const jsonScene = {
+  //     type: "excalidraw",
+  //     version: 2,
+  //     source: "my-app", // puoi personalizzare questo campo
+  //     elements: excalidrawAPI.getSceneElements(),
+  //     appState: excalidrawAPI.getAppState(),
+  //     files: excalidrawAPI.getFiles(),
+  //   };
 
-    blob = new Blob([JSON.stringify(jsonScene)], {
-      type: "application/json",
-    });
-    console.log(blob);
+  //   blob = new Blob([JSON.stringify(jsonScene)], {
+  //     type: "application/json",
+  //   });
+  //   console.log(blob);
 
-    const json = await blob.text();
-    console.log(json);
-    const parsed = JSON.parse(json);
-  };
+  //   const json = await blob.text();
+  //   console.log(json);
+  //   const parsed = JSON.parse(json);
+  // };
 
 
 
