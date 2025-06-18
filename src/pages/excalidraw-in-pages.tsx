@@ -11,10 +11,15 @@ const Excalidraw = dynamic(
   },
 );
 
+import { WrapperProps } from "../excalidrawWrapper";
+
+const initArgs : WrapperProps = {
+  initArgs: {type: true, body: "errore"}
+};
 export default function Page() {
   return (
     <>
-      <Excalidraw />
+      <Excalidraw {...initArgs} />
     </>
   );
 }

@@ -34,7 +34,7 @@ import React from "react";
 
 import { Dato } from "./app/page";
 
-type WrapperProps = {
+export type WrapperProps = {
   initArgs: Dato; 
 };
 
