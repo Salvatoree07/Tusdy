@@ -61,7 +61,7 @@ function createArrowBetween(
   return arrow;
 }
 function buildExcalidrawElementsFromConcepts(
-  node: ConceptNode,
+  node: ConceptNode | null,
   startX: number,
   currentY: { value: number },
   depth = 0,
@@ -105,13 +105,13 @@ function buildExcalidrawElementsFromConcepts(
     updated: Date.now(),
     link: null,
     locked: false,
-    text: node.title,
+    text: node ? node?.title  : "" ,
     fontSize: 16,
     fontFamily: 1,
     textAlign: "center",
     verticalAlign: "middle",
     containerId: null,
-    originalText: node.title,
+    originalText: node ? node?.title  : "",
     autoResize: true,
   };
 
@@ -171,7 +171,8 @@ function buildExcalidrawElementsFromConcepts(
   currentY.value += spacingY;
 
   // Ricorsione per i figli
-  node.children?.forEach((child) => {
+  if(node){
+    node.children?.forEach((child) => {
     buildExcalidrawElementsFromConcepts(
       child,
       startX,
@@ -185,6 +186,7 @@ function buildExcalidrawElementsFromConcepts(
       positions
     );
   });
+  }
 
   return { elements, connections };
 }
@@ -192,7 +194,7 @@ function buildExcalidrawElementsFromConcepts(
 // Funzione principale
 
 
-export function buildConceptMap(root: ConceptNode) {
+export function buildConceptMap(root: ConceptNode | null) {
 
   console.log(root);
   const startX = 100;

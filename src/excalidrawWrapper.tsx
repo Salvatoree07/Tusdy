@@ -32,8 +32,10 @@ import React from "react";
 
  import App from "./ExampleApp";
 
+import { Dato } from "./app/page";
+
 type WrapperProps = {
-  initArgs?: any; 
+  initArgs: Dato; 
 };
 
 const ExcalidrawWrapper: React.FC<WrapperProps> = ({ initArgs }) => {
@@ -42,7 +44,7 @@ const ExcalidrawWrapper: React.FC<WrapperProps> = ({ initArgs }) => {
       console.log("Inizializzazione con args:", initArgs);
     }
   }, [initArgs]);
-
+  
   return (
     <App
       appTitle={"Playground modifica mappa"}

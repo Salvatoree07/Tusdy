@@ -13,7 +13,6 @@ import type {
 } from "@excalidraw/excalidraw/element/types";
 
 import type {
-  AppState,
   BinaryFileData,
   ExcalidrawImperativeAPI,
   ExcalidrawInitialDataState,
@@ -44,7 +43,6 @@ export interface AppProps {
 
 
 
-let blob: Blob;
 
 function wrapTextEveryNChars(text: string, maxLength: number): string {
   let result = "";
@@ -72,7 +70,7 @@ function wrapTextEveryNChars(text: string, maxLength: number): string {
 }
 
 export function prendiTesto() : string {
-  let testo: string = "";
+  const testo: string = "";
   return testo;
 }
 
@@ -82,9 +80,9 @@ export function trasformaTesto(testo: string) {
   console.log("contenuto splittato", segmentazione);
   
   //inserimento di una variabile per ogni parametro
-  let para1 : string = wrapTextEveryNChars(segmentazione[4], 85);
-  let para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
-  let sum : string = wrapTextEveryNChars(segmentazione[3], 30);
+  const para1 : string = wrapTextEveryNChars(segmentazione[4], 85);
+  const para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
+  const sum : string = wrapTextEveryNChars(segmentazione[3], 30);
 
   const content: {
     titolo: string;
@@ -110,7 +108,6 @@ export default function ExampleApp({
     MIME_TYPES,
     MainMenu,
     convertToExcalidrawElements,
-    loadFromBlob,
   } = excalidrawLib;
   const appRef = useRef<any>(null);
   // const [viewModeEnabled, setViewModeEnabled] = useState(false);
