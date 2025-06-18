@@ -1,7 +1,7 @@
 'use client'
 
 import { MIME_TYPES } from "@excalidraw/excalidraw";
-import { fileOpen as _fileOpen } from "browser-fs-access";
+//import { fileOpen as _fileOpen } from "browser-fs-access";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { clsx, type ClassValue } from "clsx"
@@ -37,68 +37,68 @@ export const distance2d = (x1: number, y1: number, x2: number, y2: number) => {
   return Math.hypot(xd, yd);
 };
 
-export const fileOpen = <M extends boolean | undefined = false>(opts: {
-  extensions?: FILE_EXTENSION[];
-  description: string;
-  multiple?: M;
-}): Promise<M extends false | undefined ? File : File[]> => {
-  // an unsafe TS hack, alas not much we can do AFAIK
-  type RetType = M extends false | undefined ? File : File[];
+// export const fileOpen = <M extends boolean | undefined = false>(opts: {
+//   extensions?: FILE_EXTENSION[];
+//   description: string;
+//   multiple?: M;
+// }): Promise<M extends false | undefined ? File : File[]> => {
+//   // an unsafe TS hack, alas not much we can do AFAIK
+//   type RetType = M extends false | undefined ? File : File[];
 
-  const mimeTypes = opts.extensions?.reduce((mimeTypes, type) => {
-    mimeTypes.push(MIME_TYPES[type]);
+//   const mimeTypes = opts.extensions?.reduce((mimeTypes, type) => {
+//     mimeTypes.push(MIME_TYPES[type]);
 
-    return mimeTypes;
-  }, [] as string[]);
+//     return mimeTypes;
+//   }, [] as string[]);
 
-  const extensions = opts.extensions?.reduce((acc, ext) => {
-    if (ext === "jpg") {
-      return acc.concat(".jpg", ".jpeg");
-    }
-    return acc.concat(`.${ext}`);
-  }, [] as string[]);
+//   const extensions = opts.extensions?.reduce((acc, ext) => {
+//     if (ext === "jpg") {
+//       return acc.concat(".jpg", ".jpeg");
+//     }
+//     return acc.concat(`.${ext}`);
+//   }, [] as string[]);
 
-  return _fileOpen({
-    description: opts.description,
-    extensions,
-    mimeTypes,
-    multiple: opts.multiple ?? false,
-    legacySetup: (resolve, reject, input) => {
-      const scheduleRejection = debounce(reject, INPUT_CHANGE_INTERVAL_MS);
-      const focusHandler = () => {
-        checkForFile();
-        document.addEventListener("keyup", scheduleRejection);
-        document.addEventListener("pointerup", scheduleRejection);
-        scheduleRejection();
-      };
-      const checkForFile = () => {
-        // this hack might not work when expecting multiple files
-        if (input.files?.length) {
-          const ret = opts.multiple ? [...input.files] : input.files[0];
-          resolve(ret as RetType);
-        }
-      };
-      requestAnimationFrame(() => {
-        window.addEventListener("focus", focusHandler);
-      });
-      const interval = window.setInterval(() => {
-        checkForFile();
-      }, INPUT_CHANGE_INTERVAL_MS);
-      return (rejectPromise) => {
-        clearInterval(interval);
-        scheduleRejection.cancel();
-        window.removeEventListener("focus", focusHandler);
-        document.removeEventListener("keyup", scheduleRejection);
-        document.removeEventListener("pointerup", scheduleRejection);
-        if (rejectPromise) {
-          // so that something is shown in console if we need to debug this
-          console.warn("Opening the file was canceled (legacy-fs).");
-          rejectPromise(new Error("Request Aborted"));
-        }
-      };
-    },
-  }) as Promise<RetType>;
-};
+//   return _fileOpen({
+//     description: opts.description,
+//     extensions,
+//     mimeTypes,
+//     multiple: opts.multiple ?? false,
+//     legacySetup: (resolve, reject, input) => {
+//       const scheduleRejection = debounce(reject, INPUT_CHANGE_INTERVAL_MS);
+//       const focusHandler = () => {
+//         checkForFile();
+//         document.addEventListener("keyup", scheduleRejection);
+//         document.addEventListener("pointerup", scheduleRejection);
+//         scheduleRejection();
+//       };
+//       const checkForFile = () => {
+//         // this hack might not work when expecting multiple files
+//         if (input.files?.length) {
+//           const ret = opts.multiple ? [...input.files] : input.files[0];
+//           resolve(ret as RetType);
+//         }
+//       };
+//       requestAnimationFrame(() => {
+//         window.addEventListener("focus", focusHandler);
+//       });
+//       const interval = window.setInterval(() => {
+//         checkForFile();
+//       }, INPUT_CHANGE_INTERVAL_MS);
+//       return (rejectPromise) => {
+//         clearInterval(interval);
+//         scheduleRejection.cancel();
+//         window.removeEventListener("focus", focusHandler);
+//         document.removeEventListener("keyup", scheduleRejection);
+//         document.removeEventListener("pointerup", scheduleRejection);
+//         if (rejectPromise) {
+//           // so that something is shown in console if we need to debug this
+//           console.warn("Opening the file was canceled (legacy-fs).");
+//           rejectPromise(new Error("Request Aborted"));
+//         }
+//       };
+//     },
+//   }) as Promise<RetType>;
+// };
 
 export const debounce = <T extends any[]>(
   fn: (...args: T) => void,
