@@ -97,7 +97,7 @@ type Dato = {
 }
 
 
-let dati : Dato = {
+const dati : Dato = {
   type: false,
   body: "errore"
 };

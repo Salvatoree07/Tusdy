@@ -203,8 +203,7 @@ export default function ExampleApp({
             const dati: LayoutLineare = trasformaTesto(useCustom.body);
             const scene = buildComponents(dati);
 
-            //@ts-expect-error
-            //@typescript-eslint/ban-ts-comment
+            // @ts-expect-error: `resolve` is a custom method from resolvablePromise and not recognized by TS
             initialStatePromiseRef.current.promise.resolve({
               ...initialData,
               elements: convertToExcalidrawElements(scene),
@@ -228,7 +227,7 @@ export default function ExampleApp({
     ): node is ReactElement<ExcalidrawProps> =>
     React.isValidElement(node) &&
     typeof node.type !== "string" &&
-    (node.type as any).displayName === "Excalidraw";
+    (node.type as { displayName?: string }).displayName === "Excalidraw";
 
     // Trova il figlio Excalidraw
     const Excalidraw = Children.toArray(children).find(isExcalidrawElement);

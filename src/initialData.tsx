@@ -546,7 +546,7 @@ const elements: ExcalidrawElementSkeleton[] =
     }
   ];
 
-export function buildComponents(content: any) : ExcalidrawElementSkeleton[]{
+export function buildComponents(content: LayoutLineare) : ExcalidrawElementSkeleton[]{
     return(
     [
       {
