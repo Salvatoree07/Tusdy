@@ -22,16 +22,18 @@
 
 
 'use client';
-
+import { Dato } from "@/app/page";
 import dynamic from "next/dynamic";
 import Script from "next/script";
-
+type Propri = {
+  initArgs : Dato;
+}
 const ExcalidrawWithClientOnly = dynamic(
   () => import("../excalidrawWrapper").then((mod) => mod.default),
   { ssr: false }
 );
 
-export default function ExcalidrawClient(props: any) {
+export default function ExcalidrawClient(props: Propri) {
   const initArgs = props.initArgs; // oppure qualsiasi valore tu voglia passare
   console.log("cotenuto", initArgs);
 

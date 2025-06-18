@@ -9,9 +9,9 @@ import React, {
 import type * as TExcalidraw from "@excalidraw/excalidraw";
 import type {
   NonDeletedExcalidrawElement,
-  Theme,
+  //Theme,
 } from "@excalidraw/excalidraw/element/types";
-
+import { UIOptions } from "@excalidraw/excalidraw/types";
 import type {
   BinaryFileData,
   ExcalidrawImperativeAPI,
@@ -31,7 +31,9 @@ import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform
 import { buildComponents } from "./initialData";
 //export var datiLin = "La bomba atomica: nascita, impatto e conseguenze; Hiroshima e Nagasaki, Giappone; 6 e 9 agosto 1945; La bomba atomica, sviluppata durante la Seconda Guerra Mondiale nel contesto del Progetto Manhattan, fu utilizzata dagli Stati Uniti contro le città giapponesi di Hiroshima e Nagasaki, causando centinaia di migliaia di morti e segnando l'inizio dell'era nucleare; La bomba atomica fu il risultato di una corsa scientifica e militare senza precedenti. Il Progetto Manhattan, avviato nel 1939 e guidato da scienziati come Oppenheimer e Fermi, portò alla creazione di un’arma nucleare capace di sprigionare un’energia distruttiva mai vista. Il 6 agosto 1945, la bomba “Little Boy” fu sganciata su Hiroshima, seguita tre giorni dopo da “Fat Man” su Nagasaki. Gli effetti furono devastanti: decine di migliaia di persone morirono all’istante, e molte altre perirono nei mesi successivi a causa delle radiazioni; L’uso delle bombe atomiche ebbe conseguenze politiche, morali e scientifiche profonde. Se da un lato accelerò la resa del Giappone e la fine del conflitto, dall’altro sollevò dibattiti etici sull’uso di armi di distruzione di massa. Inoltre, aprì la strada alla Guerra Fredda e alla proliferazione nucleare. Il mondo entrò in una nuova fase geopolitica dominata dall’equilibrio del terrore tra le potenze atomiche, che ancora oggi influenza la politica internazionale.";
 import type { Dato } from "./app/page";
-
+import { ReactNode } from "react";
+import { ReactElement } from "react";
+import { ExcalidrawProps } from "@excalidraw/excalidraw/types";
 
 export interface AppProps {
   appTitle: string;
@@ -74,6 +76,14 @@ export function prendiTesto() : string {
   return testo;
 }
 
+export type LayoutLineare = {
+  titolo: string;
+  luogo: string;
+  data: string;
+  summary: string;
+  paragrafo1: string;
+  paragrafo2: string
+}
 export function trasformaTesto(testo: string) {
   console.log('testofinale', testo);
   const segmentazione: string[] = testo.split(";");
@@ -84,14 +94,7 @@ export function trasformaTesto(testo: string) {
   const para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
   const sum : string = wrapTextEveryNChars(segmentazione[3], 30);
 
-  const content: {
-    titolo: string;
-    luogo: string;
-    data: string;
-    summary: string;
-    paragrafo1: string;
-    paragrafo2: string
-  } = {titolo: segmentazione[0], luogo: segmentazione[1], data: segmentazione[2], summary:sum, paragrafo1: para1, paragrafo2: para2};
+  const content: LayoutLineare = {titolo: segmentazione[0], luogo: segmentazione[1], data: segmentazione[2], summary:sum, paragrafo1: para1, paragrafo2: para2};
   console.log("hello its me", segmentazione);
   console.log(content);
   return content;
@@ -109,13 +112,13 @@ export default function ExampleApp({
     MainMenu,
     convertToExcalidrawElements,
   } = excalidrawLib;
-  const appRef = useRef<any>(null);
+  const appRef = useRef<HTMLDivElement>(null);
   // const [viewModeEnabled, setViewModeEnabled] = useState(false);
   // const [zenModeEnabled, setZenModeEnabled] = useState(false);
   // const [gridModeEnabled, setGridModeEnabled] = useState(false);
   // const [renderScrollbars, setRenderScrollbars] = useState(false);
-  const [theme, setTheme] = useState<Theme>("light");
-  const [disableImageTool, setDisableImageTool] = useState(false);
+  //const [theme, setTheme] = useState<Theme>("light");
+  //const [disableImageTool, setDisableImageTool] = useState(false);
   
   const initialStatePromiseRef = useRef<{
     promise: ResolvablePromise<ExcalidrawInitialDataState | null>;
@@ -189,7 +192,7 @@ export default function ExampleApp({
           //console.log("Testo ottenuto:", testo);
 
           if(useCustom.type){
-            const cleaned = parseJSONFromString(useCustom.body);
+            const cleaned = parseJSONFromString<ConceptNode>(useCustom.body);
             const { elements, connections } = buildConceptMap(cleaned);
             const scene : ExcalidrawElementSkeleton[] = [...elements, ...connections];
             initialStatePromiseRef.current.promise.resolve({
@@ -197,10 +200,11 @@ export default function ExampleApp({
               elements: convertToExcalidrawElements(scene),
             });
           } else {
-            const dati = trasformaTesto(useCustom.body);
+            const dati: LayoutLineare = trasformaTesto(useCustom.body);
             const scene = buildComponents(dati);
 
             //@ts-expect-error
+            //@typescript-eslint/ban-ts-comment
             initialStatePromiseRef.current.promise.resolve({
               ...initialData,
               elements: convertToExcalidrawElements(scene),
@@ -217,52 +221,86 @@ export default function ExampleApp({
     fetchData();
   }, [excalidrawAPI, convertToExcalidrawElements, MIME_TYPES]);
 
-
+  // Type guard per Excalidraw React element
   const renderExcalidraw = (children: React.ReactNode) => {
-    const Excalidraw: any = Children.toArray(children).find(
-      (child) =>
-        React.isValidElement(child) &&
-        typeof child.type !== "string" &&
-        //@ts-expect-error
-        child.type.displayName === "Excalidraw",
-    );
-    if (!Excalidraw) {
-      return;
-    }
-    const newElement = cloneElement(
-      Excalidraw,
-      {
-        excalidrawAPI: (api: ExcalidrawImperativeAPI) => setExcalidrawAPI(api),
-        initialData: initialStatePromiseRef.current.promise,
-        onChange: (
-        ) => {
-          //console.info("Elements :", elements, "State : ", state);
-        },
-        // viewModeEnabled,
-        // zenModeEnabled,
-        // renderScrollbars,
-        // gridModeEnabled,
-        theme,
-        name: "Custom name of drawing",
-        UIOptions: {
-          canvasActions: {
-            loadScene: false,
-          },
-          tools: { image: !disableImageTool },
-        },
-        
-        onLinkOpen,
+    const isExcalidrawElement = (
+      node: ReactNode
+    ): node is ReactElement<ExcalidrawProps> =>
+    React.isValidElement(node) &&
+    typeof node.type !== "string" &&
+    (node.type as any).displayName === "Excalidraw";
 
-        validateEmbeddable: true,
+    // Trova il figlio Excalidraw
+    const Excalidraw = Children.toArray(children).find(isExcalidrawElement);
+
+    // Se non trovato, esci
+    if (!Excalidraw) return null;
+
+    // Ora Excalidraw è sicuramente un ReactElement<ExcalidrawProps>
+    const newElement = cloneElement(Excalidraw, {
+    excalidrawAPI: (api: ExcalidrawImperativeAPI) => setExcalidrawAPI(api),
+    initialData: initialStatePromiseRef.current.promise,
+    onChange: () => {
+      //...
+    },
+    name: "Custom name of drawing",
+    UIOptions: {
+      canvasActions: {
+        loadScene: false,
       },
-      <>
-        
-        
-        {renderMenu()}
-      </>,
-    );
-    return newElement;
+    } as Partial<UIOptions>,
+    onLinkOpen,
+    validateEmbeddable: true,
+    }, <>
+    {renderMenu()}
+    </>);
+    return newElement
   };
+  // const renderExcalidraw = (children: React.ReactNode) => {
+  //   const Excalidraw = Children.toArray(children).find(
+  //     (child) =>
+  //       React.isValidElement(child) &&
+  //       typeof child.type !== "string" &&
+  //       //@ts-expect-error
+  //       child.type.displayName === "Excalidraw",
+  //   );
+  //   if (!Excalidraw) {
+  //     return;
+  //   }
+  //   const newElement = cloneElement(
+  //     Excalidraw,
+  //     {
+  //       excalidrawAPI: (api: ExcalidrawImperativeAPI) => setExcalidrawAPI(api),
+  //       initialData: initialStatePromiseRef.current.promise,
+  //       onChange: (
+  //       ) => {
+  //         //console.info("Elements :", elements, "State : ", state);
+  //       },
+  //       // viewModeEnabled,
+  //       // zenModeEnabled,
+  //       // renderScrollbars,
+  //       // gridModeEnabled,
+  //       //theme,
+  //       name: "Custom name of drawing",
+  //       UIOptions: {
+  //         canvasActions: {
+  //           loadScene: false,
+  //         },
+  //         //tools: { image: !disableImageTool },
+  //       },
+        
+  //       onLinkOpen,
+
+  //       validateEmbeddable: true,
+  //     },
+  //     <>
+        
+        
+  //       {renderMenu()}
+  //     </>,
+  //   );
+  //   return newElement;
+  // };
   
 
   // const loadSceneOrLibrary = async () => {
@@ -291,19 +329,19 @@ export default function ExampleApp({
   };
   
 //aggiungere il range sopo cui mettere lo \n
-  const conceptTree: ConceptNode = {
-    title: "Cellula",
-    children: [
-      {
-        title: "Nucleo",
-        children: [{ title: "dsdsdsdd" }, { title: "Controllo" }]
-      },
-      {
-        title: "Citoplasma",
-        children: [{ title: "Organuli" }]
-      }
-    ]
-  };
+  // const conceptTree: ConceptNode = {
+  //   title: "Cellula",
+  //   children: [
+  //     {
+  //       title: "Nucleo",
+  //       children: [{ title: "dsdsdsdd" }, { title: "Controllo" }]
+  //     },
+  //     {
+  //       title: "Citoplasma",
+  //       children: [{ title: "Organuli" }]
+  //     }
+  //   ]
+  // };
 
 
   // const caricaMappa = () => {
@@ -320,7 +358,7 @@ export default function ExampleApp({
   //     // }
   // };
 
-  function parseJSONFromString(input: string): any | null {
+  function parseJSONFromString<T = unknown>(input: string): T | null {
     try {
       // Rimuove eventuali markdown (come ```json ... ```)
       const cleaned = input
@@ -329,7 +367,7 @@ export default function ExampleApp({
         .replace(/```$/i, "");        // rimuove ``` alla fine
 
       // Prova a fare il parsing del JSON
-      return JSON.parse(cleaned);
+      return JSON.parse(cleaned) as T;
     } catch (error) {
       console.error("Errore nel parsing del JSON:", error);
       return null;
