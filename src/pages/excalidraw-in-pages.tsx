@@ -14,7 +14,7 @@ const Excalidraw = dynamic(
 import { WrapperProps } from "../excalidrawWrapper";
 
 const initArgs : WrapperProps = {
-  initArgs: {type: true, body: "errore"}
+  initArgs: {type: true, body: "errore", style:"", palette:""}
 };
 export default function Page() {
   return (

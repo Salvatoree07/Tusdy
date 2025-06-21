@@ -34,6 +34,7 @@ import type { Dato } from "./app/page";
 import { ReactNode } from "react";
 import { ReactElement } from "react";
 import { ExcalidrawProps } from "@excalidraw/excalidraw/types";
+import { strict } from "assert";
 
 export interface AppProps {
   appTitle: string;
@@ -71,6 +72,44 @@ function wrapTextEveryNChars(text: string, maxLength: number): string {
   return result;
 }
 
+function wrapTextEveryNCharsLink(text: string, maxLength: number): string {
+  let result = "";
+  let i = 0;
+
+  try {
+    while (i < text.length) {
+      const chunk = text.slice(i, i + maxLength);
+      result += chunk + "\n";
+      i += maxLength;
+    }
+  } catch {
+    return result;
+  }
+
+  return result;
+}
+
+function formattaDomande (testo: string):string{
+  let con:string[]= testo.split("¶");
+  let result="";
+  con.forEach((elemento)=>{
+    result+=wrapTextEveryNChars(elemento,33)+"\n";
+  });
+  return result;
+}
+
+function formattaLink (testo: string):string{
+  let con:string[]= testo.split("¶");
+  let result="";
+  con.forEach((elemento)=>{
+    result+=wrapTextEveryNCharsLink(elemento,30)+"\n";
+  });
+  return result;
+}
+
+
+
+
 export function prendiTesto() : string {
   const testo: string = "";
   return testo;
@@ -80,9 +119,18 @@ export type LayoutLineare = {
   titolo: string;
   luogo: string;
   data: string;
-  summary: string;
+  keyWords: string;
+  titlePara1: string;
   paragrafo1: string;
-  paragrafo2: string
+  titlePara2: string;
+  paragrafo2: string;
+  questions: string;
+  plus: string;
+}
+
+export type LayoutStile = {
+  style: string;
+  palette: string;
 }
 export function trasformaTesto(testo: string) {
   console.log('testofinale', testo);
@@ -90,11 +138,30 @@ export function trasformaTesto(testo: string) {
   console.log("contenuto splittato", segmentazione);
   
   //inserimento di una variabile per ogni parametro
-  const para1 : string = wrapTextEveryNChars(segmentazione[4], 85);
-  const para2 : string = wrapTextEveryNChars(segmentazione[5], 85);
-  const sum : string = wrapTextEveryNChars(segmentazione[3], 30);
+  const titolo: string = segmentazione[0];
+  const luogo: string = wrapTextEveryNChars(segmentazione[1], 30);
+  const data: string = wrapTextEveryNChars(segmentazione[2],30);
+  const keywords: string = wrapTextEveryNChars(segmentazione[3], 30);
+  const titlePar1: string = segmentazione[4];
+  const bodyPar1: string = wrapTextEveryNChars(segmentazione[5],78);
+  const titlePar2: string = segmentazione[6];
+  const bodyPar2: string = wrapTextEveryNChars(segmentazione[7],73);
+  const questions: string = formattaDomande(segmentazione[8]);
+  const approfo: string = formattaLink(segmentazione[9]);
 
-  const content: LayoutLineare = {titolo: segmentazione[0], luogo: segmentazione[1], data: segmentazione[2], summary:sum, paragrafo1: para1, paragrafo2: para2};
+  const content: LayoutLineare = {
+    titolo: titolo, 
+    luogo: luogo, 
+    data: data, 
+    keyWords: keywords,
+    titlePara1: titlePar1,
+    paragrafo1: bodyPar1,
+    titlePara2: titlePar2,
+    paragrafo2: bodyPar2,
+    questions: questions,
+    plus: approfo,
+  };
+
   console.log("hello its me", segmentazione);
   console.log(content);
   return content;
@@ -201,7 +268,8 @@ export default function ExampleApp({
             });
           } else {
             const dati: LayoutLineare = trasformaTesto(useCustom.body);
-            const scene = buildComponents(dati);
+            const stile : LayoutStile = {style:useCustom.style, palette:useCustom.palette}
+            const scene = buildComponents(dati, stile);
 
             // @ts-expect-error: `resolve` is a custom method from resolvablePromise and not recognized by TS
             initialStatePromiseRef.current.promise.resolve({

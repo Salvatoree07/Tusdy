@@ -22,7 +22,7 @@
 
 
 'use client';
-import { Dato } from "@/app/page";
+import type { Dato } from "@/app/page";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 type Propri = {

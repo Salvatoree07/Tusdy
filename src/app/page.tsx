@@ -14,12 +14,16 @@ import { Toggle } from "@/components/ui/toggle";
 export type Dato = {
   type: boolean;
   body: string;
+  style: string;
+  palette: string;
 }
 
 
 const dati : Dato = {
   type: false,
-  body: "errore"
+  body: "errore",
+  style: "formale",
+  palette: "bianconero"
 };
 
 
@@ -89,6 +93,8 @@ export default function Page(){
     } else if (updatedFormData.type=="lineare"){
       dati.type = false
     }
+    dati.style=updatedFormData.style ? updatedFormData.style : "formale";
+    dati.palette=updatedFormData.palette ? updatedFormData.palette : "bianconero";
     setClicked(false);
     router.push('/');
   }
@@ -211,8 +217,8 @@ export default function Page(){
                             </div>
                           </Toggle>
                           <Toggle
-                            pressed={styleMap === "Rounded"}
-                            onPressedChange={() => handleStyleClick("Rounded")}
+                            pressed={styleMap === "rounded"}
+                            onPressedChange={() => handleStyleClick("rounded")}
                             className="text-white size-30"
                           >
                             <div className="flex flex-col">
