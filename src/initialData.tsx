@@ -588,11 +588,10 @@ type Format = {
   quest: ElementFormat;
   plus: ElementFormat;
   para1:ElementFormat;
-  // Aggiungi qui eventuali altri stili personalizzati che stai usando
 };
 
 function buildFormat(stile: LayoutStile): Format{
-  let risultato: Format= {
+  const risultato: Format= {
     page : {
       angle: 0,
       stroke: "#1e1e1e",

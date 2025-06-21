@@ -34,7 +34,6 @@ import type { Dato } from "./app/page";
 import { ReactNode } from "react";
 import { ReactElement } from "react";
 import { ExcalidrawProps } from "@excalidraw/excalidraw/types";
-import { strict } from "assert";
 
 export interface AppProps {
   appTitle: string;
@@ -90,7 +89,7 @@ function wrapTextEveryNCharsLink(text: string, maxLength: number): string {
 }
 
 function formattaDomande (testo: string):string{
-  let con:string[]= testo.split("¶");
+  const con:string[]= testo.split("¶");
   let result="";
   con.forEach((elemento)=>{
     result+=wrapTextEveryNChars(elemento,33)+"\n";
@@ -99,7 +98,7 @@ function formattaDomande (testo: string):string{
 }
 
 function formattaLink (testo: string):string{
-  let con:string[]= testo.split("¶");
+  const con:string[]= testo.split("¶");
   let result="";
   con.forEach((elemento)=>{
     result+=wrapTextEveryNCharsLink(elemento,30)+"\n";
