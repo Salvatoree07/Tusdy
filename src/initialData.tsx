@@ -2251,7 +2251,7 @@ export function buildComponents(content: LayoutLineare, stile: LayoutStile) : Ex
 export default {
 
   elements,
-  appState: { viewBackgroundColor: "#AFEEEE", currentItemFontFamily: 5 },
+  appState: { viewBackgroundColor: "#f8f9fa", currentItemFontFamily: 5 },
   scrollToContent: true,
   libraryItems: [
     [

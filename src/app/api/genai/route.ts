@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     if(master.type=='concettuale'){
         const response = await ai.models.generateContent({
         model: modello,
-        contents: "Genera una mappa concettuale in formato JSON senza usare sul tema "+master.topic+"Inserendo i seguenti dettagli"+master.extraDetails+" e prendendo in considerazione le seguenti fonti"+master.sources+"Usa questo schema ricorsivo:  {    'title': 'string',    'children': [      { 'title': 'string', 'children': [ ... ] }    ]  }  Limita i titoli a max 5 parole. Nessun testo fuori dal JSON.",
+        contents: "Genera una mappa concettuale in formato JSON senza usare sul tema "+master.title+"Inserendo i seguenti dettagli"+master.extraDetails+" e prendendo in considerazione le seguenti fonti"+master.sources+"Usa questo schema ricorsivo:  {    'title': 'string',    'children': [      { 'title': 'string', 'children': [ ... ] }    ]  }  Limita i titoli a max 5 parole. Nessun testo fuori dal JSON.",
         });
         console.log(response.text);
         return NextResponse.json(response.text);

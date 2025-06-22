@@ -99,7 +99,14 @@ export default function Page(){
     router.push('/');
   }
   if(clicked == false){
-    return <ExcalidrawClient initArgs={dati}/>;
+    return (
+      <>
+        <ExcalidrawClient initArgs={dati}/>
+        <div className="flex justify-center">
+          <Button className="bg-red-600 rounded-xl m-5" onClick={()=>{window.location.reload()}}>ESCI</Button>
+        </div>
+      </>
+    );
   } else {
     return(
       <div className="font-body">
@@ -107,11 +114,12 @@ export default function Page(){
           <Image src={'/img/logo-main.png'} alt="immagine logo centrale" height={338} width={436} className="absolute -z-10"/>
           <div className="text-center">
             <h1 className="text-8xl text-white p-3 bordo font-title">Tusdy</h1>
-            <p className="p-3 ">La web application perfetta per <br />generare mappe concettuali</p>
-            <button className="underline ">Scopri di più</button>
+            <p className="p-3 ">La web application perfetta per <br />generare schemi</p>
+            <a href="#main"><button className="underline ">Scopri di più</button></a>
           </div>
         </div>
-        <div className="h-screen">
+        <section id="main">
+          <div className="h-screen">
           <div className="space-y-30 flex justify-around relative top-10 flex-wrap md:space-y-0">
             <div className="relative h-fit">
               <div className="p-5  size-80 rounded-xl bg-[#F29F05] noise">
@@ -166,8 +174,8 @@ export default function Page(){
                   {/* Step 1 */}
                   {step === 1 && (
                     <div className="space-y-4">
-                      <Input name="title" placeholder="Titolo della mappa" value={formData.title} onChange={handleChange}  />
-                      <Input name="topic" placeholder="Argomento principale" value={formData.topic} onChange={handleChange} />
+                      <Input name="title" placeholder="Titolo della mappa" value={formData.title} onChange={handleChange} required />
+                      <Input name="topic" placeholder="Argomento principale" value={formData.topic} onChange={handleChange}  required/>
                       <div className="space-x-3 flex justify-center">
                         <Toggle 
                           pressed={typeMap === "concettuale"}
@@ -292,7 +300,8 @@ export default function Page(){
                 </DialogContent>
             </Dialog>
           </div>
-        </div>
+          </div>
+        </section>
       </div>
     )
   }
